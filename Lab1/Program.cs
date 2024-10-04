@@ -1,4 +1,7 @@
-﻿namespace Lab1
+﻿using System;
+using System.IO;
+
+namespace Lab1
 {
     static class Program
     {
@@ -9,72 +12,98 @@
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-            int[,] board = new int[8, 8];
-            bool[,] visited = new bool[8, 8]; // Масив для відвіданих клітинок
+            
+            
+            string input = File.ReadAllText("INPUT.txt").Trim();
+            string[] positions = input.Split(", ");
+            int startX, startY, endX, endY;
 
-            int startX, startY, endX, endY; // Ініціалізуємо змінні
-
-            if (!GetCoordinates(args, out startX, out startY, out endX, out endY))
+            if (!GetCoordinates(positions, out startX, out startY, out endX, out endY))
             {
-                Console.Error.WriteLine("Ой, щось пішло не так...");
+                Console.Error.WriteLine("Некоректні координати у файлі INPUT.TXT.");
                 return;
             }
 
-            int moves = Move(board, visited, startX, startY, endX, endY, 0);
+            bool[,] visited = new bool[8, 8]; // Масив для відвіданих клітинок
 
-            Console.WriteLine(moves == -1 ? "Забагато ходів" : $"Кількість ходів: {moves}");
+            int moves = Move(visited, startX, startY, endX, endY, 0);
+
+            try {
+                CheckFile("OUTPUT.TXT");
+                WriteOutput("OUTPUT.TXT", moves);
+            }
+            catch (Exception ex) {
+                Console.WriteLine(ex.Message);
+            }
+
         }
 
-        static bool GetCoordinates(string[] args, out int startX, out int startY, out int endX, out int endY)
+        static bool WriteInput(string path, string input)
+        {
+            try
+            {
+                File.WriteAllText(path, input);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
+
+        static void WriteOutput(string path, int moves)
+        {
+            if (moves == 1 || moves == 2)
+                File.WriteAllText(path, moves.ToString());
+            else
+                File.WriteAllText(path, "NO");
+        }
+
+        static void CheckFile(string path)
+        {
+            if (File.Exists(path))
+                File.WriteAllText(path, string.Empty);
+            else
+                File.Create(path).Close();
+        }
+
+        static bool GetCoordinates(string[] positions, out int startX, out int startY, out int endX, out int endY)
         {
             startX = startY = endX = endY = -1;
 
-            if (args.Length == 4)
+            if (positions.Length == 2 &&
+                ParsePosition(positions[0], out startX, out startY) &&
+                ParsePosition(positions[1], out endX, out endY))
             {
-                // Якщо передані аргументи через командний рядок
-                if (ValidateInput(args, out startX, out startY, out endX, out endY))
-                {
-                    return true;
-                }
-                else
-                {
-                    Console.WriteLine("Потрібно ввести коректні координати через командний рядок у форматі: x-start y-start x-end y-end");
-                    return false;
-                }
+                return true;
             }
 
-            // Якщо аргументи не передані, просимо ввести вручну
-            Console.WriteLine("Введіть координати через пробіл: x-start y-start x-end y-end");
-            string[] input = Console.ReadLine().Split(' ');
+            return false;
+        }
 
-            while (!ValidateInput(input, out startX, out startY, out endX, out endY))
-            {
-                Console.WriteLine("Неправильно введені дані. Будь ласка, введіть координати у форматі: x-start y-start x-end y-end");
-                input = Console.ReadLine().Split(' ');
-            }
+        static bool ParsePosition(string position, out int x, out int y)
+        {
+            x = y = -1;
+            if (position.Length != 2) return false;
+
+            char file = position[0];
+            char rank = position[1];
+
+            if (file < 'a' || file > 'h' || rank < '1' || rank > '8') return false;
+
+            x = file - 'a'; 
+            y = rank - '1'; 
 
             return true;
         }
 
-        static bool ValidateInput(string[] input, out int startX, out int startY, out int endX, out int endY)
+        public static bool IsMovePossible(int x, int y, bool[,] visited) // Чи можна ходити
         {
-            startX = startY = endX = endY = -1;
-
-            if (input.Length != 4)
-                return false;
-
-            return int.TryParse(input[0], out startX) && startX >= 0 && startX < 8 &&
-                   int.TryParse(input[1], out startY) && startY >= 0 && startY < 8 &&
-                   int.TryParse(input[2], out endX) && endX >= 0 && endX < 8 &&
-                   int.TryParse(input[3], out endY) && endY >= 0 && endY < 8;
+            return x >= 0 && x < 8 && y >= 0 && y < 8 && !visited[x, y];
         }
 
-        public static bool IsMovePossible(int x, int y, int[,] board, bool[,] visited) // Чи можна ходити
-        {
-            return x >= 0 && x < board.GetLength(0) && y >= 0 && y < board.GetLength(1) && !visited[x, y];
-        }
-
-        public static int Move(int[,] board, bool[,] visited, int startX, int startY, int endX, int endY, int steps)
+        public static int Move(bool[,] visited, int startX, int startY, int endX, int endY, int steps)
         {
             if (steps > 2) // Завелика глибина
                 return -1;
@@ -91,9 +120,9 @@
                 int x = startX + knightMovesX[i];
                 int y = startY + knightMovesY[i];
 
-                if (IsMovePossible(x, y, board, visited))
+                if (IsMovePossible(x, y, visited))
                 {
-                    int result = Move(board, visited, x, y, endX, endY, steps + 1);
+                    int result = Move(visited, x, y, endX, endY, steps + 1);
 
                     if (result != -1)
                         minSteps = Math.Min(minSteps, result);
