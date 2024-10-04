@@ -7,4 +7,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="INPUT.txt~RF1b31bd1.TMP" />
+    <None Remove="INPUT.txt~RF1c0cc74.TMP" />
+    <None Remove="INPUT.txt~RF1da1626.TMP" />
+  </ItemGroup>
+
 </Project>
