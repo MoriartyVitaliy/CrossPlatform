@@ -28,6 +28,11 @@ jobs:
         run: |
           dotnet restore Lab1/Lab1.csproj  
           dotnet restore Lab2/Lab2.csproj  
+          
+      - name: Build projects
+        run: |
+          dotnet build Build.proj -p:Solution=Lab1 -t:Build
+          dotnet build Build.proj -p:Solution=Lab2 -t:Build 
 
       - name: Build and Test projects
         run: |
