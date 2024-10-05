@@ -36,20 +36,21 @@ jobs:
 
       - name: List files
         run: ls -R  # Переглянути всі файли і каталоги
+        
+      - name: Run Lab1
+        run: |
+          dotnet build build.proj -p:Solution=Lab1 -t:Run
 
-      - name: Build and Test projects
+      - name: Run Lab2
+        run: |
+          dotnet build build.proj -p:Solution=Lab2 -t:Run
+
+      - name: Test Lab1
         run: |
           dotnet build build.proj -p:Solution=Lab1 -t:Test
+      
+      - name: Test Lab2
+        run: |
           dotnet build build.proj -p:Solution=Lab2 -t:Test
 
-      - name: Run tests lab1
-        run: |
-          dotnet test Lab1.Tests/Lab1.Tests.csproj --configuration Release --no-build --verbosity normal
-          
-      - name: Run tests without coverage lab1
-        run: |
-          dotnet test Lab1.Tests/Lab1.Tests.csproj --configuration Release --verbosity normal --no-restore
 
-      - name: Run tests lab2
-        run: |
-          dotnet test Lab2.Tests/Lab1.Tests.csproj --configuration Release --no-build --verbosity normal
