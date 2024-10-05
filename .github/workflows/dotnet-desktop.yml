@@ -1,0 +1,40 @@
+name: .NET Core CI
+
+on:
+  push:
+    branches:
+      - develop
+      - master
+  pull_request:
+    branches:
+      - develop
+      - master
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '8.0'  
+
+      - name: Restore dependencies
+        run: |
+          dotnet restore Lab1/Lab1.csproj  
+          dotnet restore Lab2/Lab2.csproj  
+
+      - name: Build and Test projects
+        run: |
+          dotnet build Build.proj -p:Solution=Lab1 -t:Test
+          dotnet build Build.proj -p:Solution=Lab2 -t:Test  
+
+      - name: Run tests
+        run: |
+          dotnet test Lab1/Lab1.csproj --configuration Release --no-build --verbosity normal
+          dotnet test Lab2/Lab2.csproj --configuration Release --no-build --verbosity normal
