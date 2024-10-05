@@ -22,24 +22,24 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '8.0'  
+          dotnet-version: '8.0' 
 
       - name: Restore dependencies
         run: |
-          dotnet restore Lab1/Lab1.csproj  
-          dotnet restore Lab2/Lab2.csproj  
-          
-      - name: Build projects
-        run: |
-          dotnet build Build.proj -p:Solution=Lab1 -t:Build
-          dotnet build Build.proj -p:Solution=Lab2 -t:Build 
+          dotnet restore Lab1/Lab1.csproj  # Вказати шлях до вашого основного проекту
+          dotnet restore Lab2/Lab2.csproj  # Додайте інші лабораторні проекти тут
+          dotnet restore Lab1.Tests/Lab1.Tests.csproj  # Додайте тести для Lab1
+          dotnet restore Lab2.Tests/Lab2.Tests.csproj  # Додайте тести для Lab2
+
+      - name: List files
+        run: ls -R  # Переглянути всі файли і каталоги
 
       - name: Build and Test projects
         run: |
-          dotnet build Build.proj -p:Solution=Lab1 -t:Test
-          dotnet build Build.proj -p:Solution=Lab2 -t:Test  
+          dotnet build build.proj -p:Solution=Lab1 -t:Test
+          dotnet build build.proj -p:Solution=Lab2 -t:Test
 
       - name: Run tests
         run: |
-          dotnet test Lab1/Lab1.csproj --configuration Release --no-build --verbosity normal
-          dotnet test Lab2/Lab2.csproj --configuration Release --no-build --verbosity normal
+          dotnet test Lab1.Tests/Lab1.Tests.csproj --configuration Release --no-build --verbosity normal
+          dotnet test Lab2.Tests/Lab2.Tests.csproj --configuration Release --no-build --verbosity normal
