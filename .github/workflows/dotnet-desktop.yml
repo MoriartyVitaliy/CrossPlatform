@@ -29,13 +29,15 @@ jobs:
 
       - name: Restore dependencies
         run: |
-          dotnet restore Lab1/Lab1.csproj  # Вказати шлях до вашого основного проекту
-          dotnet restore Lab2/Lab2.csproj  # Додайте інші лабораторні проекти тут
-          dotnet restore Lab1.Tests/Lab1.Tests.csproj  # Додайте тести для Lab1
-          dotnet restore Lab2.Tests/Lab2.Tests.csproj  # Додайте тести для Lab2
+          dotnet restore Lab1/Lab1.csproj
+          dotnet restore Lab2/Lab2.csproj
+          dotnet restore Lab3/Lab3.csproj
+          dotnet restore Lab1.Tests/Lab1.Tests.csproj
+          dotnet restore Lab2.Tests/Lab2.Tests.csproj
+          dotnet restore Lab3.Tests/Lab3.Tests.csproj
 
       - name: List files
-        run: ls -R  # Переглянути всі файли і каталоги
+        run: ls -R  # Переглянути всі файли
         
       - name: Run Lab1
         run: |
@@ -44,7 +46,11 @@ jobs:
       - name: Run Lab2
         run: |
           dotnet build build.proj -p:Solution=Lab2 -t:Run
-
+          
+      - name: Run Lab3
+        run: |
+          dotnet build build.proj -p:Solution=Lab3 -t:Run
+          
       - name: Test Lab1
         run: |
           dotnet build build.proj -p:Solution=Lab1 -t:Test
@@ -52,5 +58,8 @@ jobs:
       - name: Test Lab2
         run: |
           dotnet build build.proj -p:Solution=Lab2 -t:Test
-
+          
+      - name: Test Lab3
+        run: |
+          dotnet build build.proj -p:Solution=Lab3 -t:Test
 
