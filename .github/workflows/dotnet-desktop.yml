@@ -47,9 +47,6 @@ jobs:
         run: |
           dotnet build build.proj -p:Solution=Lab2 -t:Run
           
-      - name: Run Lab3
-        run: |
-          dotnet build build.proj -p:Solution=Lab3 -t:Run
           
       - name: Test Lab1
         run: |
