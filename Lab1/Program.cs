@@ -3,15 +3,15 @@ using System.IO;
 
 namespace Lab1
 {
-    static class Program
+    public static class Program
     {
-        static void Main(string[] args)
+        public static void Main(string inputFile, string outputFile)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             try
             {
 
-                string input = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\INPUT.txt")).Trim();
+                string input =  File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\INPUT.txt")).Trim();
                 string[] positions = input.Split(", ");
                 int startX, startY, endX, endY;
 

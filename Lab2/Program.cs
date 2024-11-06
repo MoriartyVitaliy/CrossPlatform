@@ -2,19 +2,17 @@
 
 namespace Lab2
 {
-    internal class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string inputFile, string outputFile)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             string input = Utils.ReadInput(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\INPUT.txt"));
 
-#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
             if (!Utils.FillArray(input, out int n, out Agent[] agents))
             {
                 return;
             }
-#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
 
             int[] minRisks = new int[n];
             minRisks[1] = agents[1].Risk;

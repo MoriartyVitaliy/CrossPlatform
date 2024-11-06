@@ -1,9 +1,9 @@
 ﻿namespace Lab3
 {
 
-    class Program
+    public class Program
     {
-        static void Main()
+        public static void Main(string inputFile, string outputFile)
         {
             string inputFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\INPUT.txt");
             string outputFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\OUTPUT.txt");
