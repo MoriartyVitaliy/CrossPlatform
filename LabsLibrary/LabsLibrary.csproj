@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="ILabsRunner.cs~RFc84568.TMP" />
+    <None Remove="Lab1Runner.cs~RF263e4b6.TMP" />
+    <None Remove="Lab3Runner.cs~RF278c2d1.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NuGet.Common" Version="6.12.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Lab1.Library\Lab1.Library.csproj" />
+    <ProjectReference Include="..\Lab2.Library\Lab2.Library.csproj" />
+    <ProjectReference Include="..\Lab3.Library\Lab3.Library.csproj" />
+  </ItemGroup>
+
+</Project>
