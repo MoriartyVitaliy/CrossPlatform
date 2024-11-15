@@ -1,0 +1,101 @@
+﻿@{
+    ViewData["Title"] = "Labs One to Three";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form method="post" asp-action="Execute">
+    <div class="form-group">
+        <label for="labSelector">Select Lab:</label>
+            <select id="labSelector" name="labName" class="form-control" onchange="updateHint()">
+                <option value="">Select Lab</option>
+                <option value="Lab1">Lab 1</option>
+                <option value="Lab2">Lab 2</option>
+                <option value="Lab3">Lab 3</option>
+            </select>
+
+        <div id="hint"></div>
+
+    </div>
+
+    <div class="form-group">
+        <label for="inputData">Input:</label>
+        <textarea type="text" id="inputData" name="inputData" class="form-control">@ViewData["InputData"]</textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Run Lab</button>
+</form>
+
+<!-- Section for dynamic hint -->
+<div id="labHint" class="alert alert-info mt-3">
+    <strong>Instructions:</strong> Please select a lab to see instructions.
+</div>
+
+@if (ViewData["Error"] != null)
+{
+    <div class="alert alert-danger mt-3">
+        @ViewData["Error"]
+    </div>
+}
+
+@if (ViewData["Result"] != null)
+{
+    <div class="alert alert-success mt-3">
+        <strong>Output:</strong> @ViewData["Result"]
+    </div>
+}
+
+@if (ViewData["InputData"] != null)
+{
+    <div class="mt-3">
+        <strong>Input Data:</strong> @ViewData["InputData"]
+    </div>
+}
+
+@if (ViewData["LabName"] != null)
+{
+    <div class="mt-3">
+        <strong>Lab Name:</strong> @ViewData["LabName"]
+    </div>
+}
+
+<script>
+    function updateHint() {
+        var labSelector = document.getElementById('labSelector');
+        var selectedLab = labSelector.value;
+        var hintText = '';
+
+        switch (selectedLab) {
+            case 'Lab1':
+                hintText = 'Lab 1: Хід коня на шаховій дошці. <br />' +
+                    'INPUT: a1, c5 <br />' +
+                    'OUTPUT: "2"';
+                break;
+            case 'Lab2':
+                hintText = 'Lab 2: Work with file I/O. <br />' +
+                    'INPUT: 5 <br />' +
+                    '5005 1 5004 2 5003 3 5002 4 5001 5<br />' +
+                    'Expected Output: 7';
+                break;
+            case 'Lab3':
+                hintText = 'Lab 3: Implement sorting algorithms. <br />' +
+                    'INPUT: <br />'+
+                    '3 <br />' +
+                    '1 1 2<br />' +
+                    '0 0 1<br />' +
+                    '1 0 0<br />' +
+                    '1 1 1<br />' +
+                    'Expected Output: 3<br />' +
+                    '0 0 1<br />' +
+                    '0 1 0<br />' +
+                    '1 0 0<br />'
+                ;
+                break;
+            default:
+                hintText = 'Please select a lab to see instructions.';
+        }
+
+        document.getElementById('hint').innerHTML = hintText;
+    }
+
+</script>

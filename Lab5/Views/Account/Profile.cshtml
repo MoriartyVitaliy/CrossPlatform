@@ -1,0 +1,49 @@
+﻿@model Lab5.ViewModels.UserProfileViewModel
+@{
+    ViewData["Title"] = "User Profile";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="row">
+            <h2>@ViewData["Title"]</h2>
+
+            <div class="col-md-2">
+                <!-- Если изображение пользователя доступно, оно будет отображено -->
+                @if (!string.IsNullOrEmpty(Model.ProfileImage) && Model.ProfileImage != "Not available")
+                {
+                    <img src="@Model.ProfileImage" alt="Profile Image" class="img-rounded img-responsive" />
+                }
+                else
+                {
+                    <img src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y" alt="Default Profile Image" class="img-rounded img-responsive" />
+                }
+            </div>
+
+            <div class="col-md-4">
+                <h3>@Model.Name</h3>
+
+                @if (Model.Username != "Not available")
+                {
+                    <p>
+                        <i class="glyphicon glyphicon-user"></i> @Model.Username
+                    </p>
+                }
+
+                @if (Model.EmailAddress != "Not available")
+                {
+                    <p>
+                        <i class="glyphicon glyphicon-envelope"></i> @Model.EmailAddress
+                    </p>
+                }
+
+                @if (Model.PhoneNumber != "Not available")
+                {
+                    <p>
+                        <i class="glyphicon glyphicon-phone"></i> @Model.PhoneNumber
+                    </p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
