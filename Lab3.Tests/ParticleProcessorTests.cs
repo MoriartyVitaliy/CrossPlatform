@@ -1,4 +1,6 @@
-﻿namespace Lab3.Tests
+﻿using Lab3.Library;
+
+namespace Lab3.Tests
 {
     public class ParticleProcessorTests
     {

@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Lab3
+﻿namespace Lab3.Library
 {
-    public static class InputReader
+    public static class Utils
     {
         public static (int n, List<int> particles, bool[,] destructionMatrix) ReadInput(string inputFilePath)
         {
@@ -26,6 +20,18 @@ namespace Lab3
             }
 
             return (n, particles, destructionMatrix);
+        }
+
+        public static void WriteOutput(string outputFilePath, HashSet<List<int>> finalStates)
+        {
+            using (StreamWriter writer = new StreamWriter(outputFilePath))
+            {
+                writer.WriteLine(finalStates.Count);
+                foreach (var state in finalStates)
+                {
+                    writer.WriteLine(string.Join(" ", state));
+                }
+            }
         }
     }
 }

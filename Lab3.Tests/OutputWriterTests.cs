@@ -1,4 +1,6 @@
-﻿namespace Lab3.Tests
+﻿using Lab3.Library;
+
+namespace Lab3.Tests
 {
     public class OutputWriterTests
     {
@@ -14,7 +16,7 @@
             };
 
             // Act
-            OutputWriter.WriteOutput(filePath, finalStates);
+            Utils.WriteOutput(filePath, finalStates);
 
             // Assert
             string[] outputLines = File.ReadAllLines(filePath);

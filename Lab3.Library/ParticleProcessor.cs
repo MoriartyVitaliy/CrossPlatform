@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Lab3
+﻿namespace Lab3.Library
 {
+
     public static class ParticleProcessor
     {
         public static HashSet<List<int>> ProcessParticles(int n, List<int> particles, bool[,] destructionMatrix)

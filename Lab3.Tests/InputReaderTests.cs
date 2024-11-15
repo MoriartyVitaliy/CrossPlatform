@@ -1,4 +1,6 @@
-﻿namespace Lab3.Tests
+﻿using Lab3.Library;
+
+namespace Lab3.Tests
 {
     public class InputReaderTests
     {
@@ -17,7 +19,7 @@
             });
 
             // Act
-            var (n, particles, destructionMatrix) = InputReader.ReadInput(filePath);
+            var (n, particles, destructionMatrix) = Utils.ReadInput(filePath);
 
             // Assert
             Assert.Equal(3, n);
