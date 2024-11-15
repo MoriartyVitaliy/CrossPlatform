@@ -4,12 +4,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectFile Include="$(Solution)\*.csproj" />
+    <ProjectFile Include="$(Solution).Console\*.Console.csproj" />
   </ItemGroup>
 
   <Target Name="Build">
     <PropertyGroup>
-      <BuildProject>$(Solution)\$(Solution).csproj</BuildProject>
+      <BuildProject>$(Solution).Console\$(Solution).Console.csproj</BuildProject>
     </PropertyGroup>
     <MSBuild Projects="$(BuildProject)" Targets="Restore;Build" />
   </Target>
@@ -23,8 +23,8 @@
 
    <Target Name="Run">
       <PropertyGroup>
-         <RunProject>$(Solution).csproj</RunProject>
+         <RunProject>$(Solution).Console.csproj</RunProject>
       </PropertyGroup>
-      <Exec Command="dotnet run --project &quot;$(RunProject)&quot;" WorkingDirectory="$(Solution)" />
+      <Exec Command="dotnet run --project &quot;$(RunProject)&quot;" WorkingDirectory="$(Solution).Console" />
    </Target>
 </Project>
