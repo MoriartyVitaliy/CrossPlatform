@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lab2
+namespace Lab2.Library
 {
-    public class Utils
+    public static class Utils
     {
         public static string ReadInput(string path) // Чтение 
         {

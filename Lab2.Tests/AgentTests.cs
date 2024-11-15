@@ -1,3 +1,5 @@
+using Lab2.Library;
+
 namespace Lab2.Tests
 {
 
