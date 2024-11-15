@@ -1,0 +1,44 @@
+{
+  "profiles": {
+    "Lab4": {
+      "commandName": "Project",
+      "commandLineArgs": "run lab1"
+    },
+    "Lab4: lab1 without args": {
+      "commandName": "Project",
+      "commandLineArgs": "run lab1"
+    },
+    "Lab4: lab1 with input path": {
+      "commandName": "Project",
+      "commandLineArgs": "run lab1 -i CrossPlatform\\Lab1\\INPUT.txt -o CrossPlatform\\Lab1\\OUTPUT.txt"
+    },
+    "Lab4: lab2 with input path": {
+      "commandName": "Project",
+      "commandLineArgs": "run lab2 -i CrossPlatform\\Lab2\\INPUT.txt -o CrossPlatform\\Lab2\\OUTPUT.txt"
+    },
+    "Lab4: lab3 with input path": {
+      "commandName": "Project",
+      "commandLineArgs": "run lab3 -i CrossPlatform\\Lab3\\INPUT.txt -o CrossPlatform\\Lab3\\OUTPUT.txt"
+    },
+    "Lab4: set-path": {
+      "commandName": "Project",
+      "commandLineArgs": "set-path --path CrossPlatform\\Lab2"
+    },
+    "Lab4: show-path": {
+      "commandName": "Project",
+      "commandLineArgs": "show-path"
+    },
+    "Lab4: set-path for lab1": {
+      "commandName": "Project",
+      "commandLineArgs": "set-path --path CrossPlatform\\Lab1"
+    },
+    "Lab4: set-path for lab2": {
+      "commandName": "Project",
+      "commandLineArgs": "set-path --path CrossPlatform\\Lab2"
+    },
+    "Lab4: set-path for lab3": {
+      "commandName": "Project",
+      "commandLineArgs": "set-path --path CrossPlatform\\Lab3"
+    }
+  }
+}

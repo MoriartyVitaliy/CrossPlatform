@@ -3,14 +3,27 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
+	<PackAsTool>true</PackAsTool>
+	<ToolCommandName>Lab4</ToolCommandName>
     <ImplicitUsings>enable</ImplicitUsings>
+	<PackegeId>VHriss</PackegeId>
+	<Title>VHriss</Title>
+	<Version>1.0.1</Version>
+	<Authors>Hriss</Authors>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Lab1\Lab1.csproj" />
-    <ProjectReference Include="..\Lab2\Lab2.csproj" />
-    <ProjectReference Include="..\Lab3\Lab3.csproj" />
+    <ProjectReference Include="..\Lab1.Library\Lab1.Library.csproj" />
+    <ProjectReference Include="..\Lab2.Library\Lab2.Library.csproj" />
+    <ProjectReference Include="..\Lab3.Library\Lab3.Library.csproj" />
+    <ProjectReference Include="..\LabsLibrary\LabsLibrary.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="4.1.1" />
+    <PackageReference Include="Microsoft.Extensions.CommandLineUtils" Version="1.1.1" />
   </ItemGroup>
 
 </Project>
