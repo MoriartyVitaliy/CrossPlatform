@@ -1,4 +1,4 @@
-Vagrant.configure("2") do |config|
+﻿Vagrant.configure("2") do |config|
 
     
     config.vm.define "windows" do |windows|
@@ -150,110 +150,32 @@ Vagrant.configure("2") do |config|
       SHELL
     end
 
-    config.vm.define "linux" do |linux|
-    linux.vm.box = "hashicorp/bionic64"
-    linux.vm.hostname = "linux-vm"
-    linux.vm.network "public_network"
+    config.vm.define "lab5" do |lab5|
+    lab5.vm.box = "ubuntu/jammy64"
+    lab5.vm.hostname = "lab5-vm"
+    lab5.vm.network "forwarded_port", guest: 5000, host: 5000
 
-    linux.vm.provider "virtualbox" do |vb|
+    lab5.vm.provider "virtualbox" do |vb|
       vb.memory = "4096"
-      vb.cpus = 4
+      vb.cpus = 2
     end
-    
-    linux.vm.provision "shell", run: "always", inline: <<-SHELL
-        # Update and install prerequisites
-        sudo apt-get update
-        sudo apt-get install -y wget apt-transport-https unzip
 
-        # Install .NET SDK 8.0
-        wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-        sudo dpkg -i packages-microsoft-prod.deb
-        sudo apt-get update
-        sudo apt-get install -y dotnet-sdk-8.0
+    # Провизия виртуальной машины
+    lab5.vm.provision "shell", inline: <<-SHELL
+      # Установка необходимых пакетов
+      sudo apt-get update && sudo apt-get install -y wget apt-transport-https
 
-        # Install .NET Core 3.1 SDK
-        sudo apt-get install -y dotnet-sdk-3.1
+      # Установка .NET SDK 8.0
+      wget https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+      sudo dpkg -i packages-microsoft-prod.deb
+      sudo apt-get update
+      sudo apt-get install -y dotnet-sdk-8.0
 
-        # Verify .NET SDK and Runtime installations
-        dotnet --list-sdks
-        dotnet --list-runtimes
-
-        # Download and extract BaGet
-        echo "------------------- Setting up BaGet... -------------------"
-        if [ -d "/home/vagrant/baget" ]; then
-            echo "------------------- BaGet is already installed -------------------"
-        else
-            wget https://github.com/loic-sharma/BaGet/releases/download/v0.4.0-preview2/BaGet.zip -O BaGet.zip
-            unzip BaGet.zip -d /home/vagrant/baget
-            rm BaGet.zip
-            if [ -d "/home/vagrant/baget" ]; then
-                echo "------------------- BaGet setup complete -------------------"
-            else
-                echo "------------------- Failed to set up BaGet. Exiting... -------------------"
-                exit 1
-            fi
-        fi
-
-        # Check if BaGet is running
-        RESPONSE=$(curl -o /dev/null -s -w "%{http_code}" http://localhost:5000)
-        if [ "$RESPONSE" -eq 200 ]; then
-            echo "------------------- BaGet is already running -------------------"
-        else
-            # Start BaGet
-            echo "------------------- Starting BaGet -------------------"
-            cd /home/vagrant/baget
-            nohup dotnet BaGet.dll > /dev/null 2>&1 &
-            sleep 5
-            RESPONSE=$(curl -o /dev/null -s -w "%{http_code}" http://localhost:5000)
-            if [ "$RESPONSE" -eq 200 ]; then
-                echo "------------------- BaGet started successfully -------------------"
-            else
-                echo "------------------- Failed to start BaGet. Exiting... -------------------"
-                exit 1
-            fi
-        fi
-
-        # Add BaGet source and build Lab4
-        cd /vagrant/Lab4
-        echo "--------------- Configuring BaGet as a NuGet source... ---------------"
-        dotnet nuget add source http://localhost:5000/v3/index.json -n BaGet
-        if dotnet nuget list source | grep -q "BaGet"; then
-            echo "------------------- BaGet source added successfully -------------------"
-        else
-            echo "------------------- Failed to add BaGet as a NuGet source. Exiting... -------------------"
-            exit 1
-        fi
-
-        echo "------------------- Building Lab4 project... -------------------"
-        dotnet build
-        if [ -f "./bin/Release/Lab4.1.0.1.nupkg" ]; then
-            echo "------------------- Lab4 project built successfully -------------------"
-        else
-            echo "------------------- Failed to build Lab4 project. Exiting... -------------------"
-            exit 1
-        fi
-
-        # Check if package exists in BaGet
-        echo "------------------- Checking if package exists in BaGet... -------------------"
-        PACKAGE_EXISTS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5000/v3/registration/VHriss/1.0.1.json)
-        if [ "$PACKAGE_EXISTS" -eq 200 ]; then
-            echo "------------------- Package already exists in BaGet. Skipping push... -------------------"
-        else
-            echo "------------------- Package does not exist. Pushing package to BaGet... -------------------"
-            dotnet nuget push -s http://localhost:5000/v3/index.json ./bin/Release/Lab4.1.0.1.nupkg --skip-duplicate
-            if [ $? -eq 0 ]; then
-                echo "------------------- Package pushed to BaGet successfully -------------------"
-            else
-                echo "------------------- Failed to push package to BaGet. Exiting... -------------------"
-                exit 1
-            fi
-        fi
-
-        # Install the tool
-        echo "------------------- Installing tool Lab4 globally... -------------------"
-        dotnet tool install --global Lab4 --version 1.0.1 --add-source http://localhost:5000/v3/index.json
-
-        echo "------------------- Run 'Lab4' to launch the tool. -------------------"
+      # Сборка и запуск Lab5
+      cd /vagrant
+      dotnet publish -c Release -o out
+      cd out
+      dotnet Lab5.dll
     SHELL
   end
     
