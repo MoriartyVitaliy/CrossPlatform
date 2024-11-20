@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="appsettings.json~RF1734597.TMP" />
+    <None Remove="appsettings.json~RF17f2d62.TMP" />
+    <None Remove="appsettings.json~RF19f9e7.TMP" />
+    <None Remove="Model\Brand.cs~RF212f9cf.TMP" />
+    <None Remove="Model\Car.cs~RF23b0c6a.TMP" />
+    <None Remove="Model\CarManufacturer.cs~RF1849f3e.TMP" />
+    <None Remove="Model\Customer.cs~RF1db5712.TMP" />
+    <None Remove="Model\PartGroup.cs~RF2e65932.TMP" />
+    <None Remove="Model\PartMaker.cs~RF257945e.TMP" />
+    <None Remove="Model\Supplier.cs~RF20ccf22.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.10" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+</Project>

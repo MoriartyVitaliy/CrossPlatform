@@ -9,7 +9,6 @@ using System.Diagnostics;
 
 namespace Lab4
 {
-    // Головний клас програми
     [Subcommand(typeof(VersionCommand), typeof(Run), typeof(SetPathCommand), typeof(ShowPathCommand))]
     [HelpOption("-h|--help")]
     public class Program
@@ -171,22 +170,18 @@ namespace Lab4
                     return;
                 }
 
-                // Проверяем доступность директории
                 if (!Directory.Exists(PathToFolder))
                 {
                     Console.WriteLine($"Error: Directory '{PathToFolder}' does not exist.");
                     return;
                 }
 
-                // Определяем цель переменной окружения
                 EnvironmentVariableTarget target = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) 
                     ? EnvironmentVariableTarget.User 
                     : EnvironmentVariableTarget.Process;
 
-                // Устанавливаем переменную окружения
                 Environment.SetEnvironmentVariable("LAB_PATH", PathToFolder, target);
 
-                // Проверяем, что переменная сохранена корректно
                 string? savedPath = Environment.GetEnvironmentVariable("LAB_PATH", target);
                 if (savedPath == PathToFolder)
                 {
