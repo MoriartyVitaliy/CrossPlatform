@@ -150,33 +150,48 @@
       SHELL
     end
 
-    config.vm.define "lab5" do |lab5|
-    lab5.vm.box = "ubuntu/jammy64"
-    lab5.vm.hostname = "lab5-vm"
-    lab5.vm.network "forwarded_port", guest: 5000, host: 5000
 
-    lab5.vm.provider "virtualbox" do |vb|
-      vb.memory = "4096"
-      vb.cpus = 2
+
+    config.vm.define "Lab5" do |linux|
+      linux.vm.box = "hashicorp/bionic64"
+      linux.vm.hostname = "linux-vm-lab5"
+      linux.vm.network "public_network"
+      linux.vm.network "forwarded_port", guest: 3000, host: 3000
+  
+      linux.vm.provider "virtualbox" do |vb|
+        vb.memory = "4096"
+        vb.cpus = 4
+      end
+  
+      linux.vm.provision "shell", run: "always", inline: <<-SHELL
+          echo "------------------- Updating system packages... -------------------"
+          sudo apt-get update
+          
+          echo "------------------- Installing prerequisites... -------------------"
+          sudo apt-get install -y wget apt-transport-https unzip
+  
+          echo "------------------- Checking .NET installation... -------------------"
+          if ! command -v dotnet &> /dev/null
+          then
+              echo ".NET SDK not found. Installing .NET SDK 8.0..."
+              wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+              sudo dpkg -i packages-microsoft-prod.deb
+              sudo apt-get update
+              sudo apt-get install -y dotnet-sdk-8.0
+          else
+              echo ".NET SDK is already installed."
+          fi
+  
+          echo "------------------- Verifying .NET SDK and Runtime versions... -------------------"
+          dotnet --list-sdks
+          dotnet --list-runtimes
+  
+          echo "------------------- Building and running Lab5 project... -------------------"
+          cd /vagrant/Lab5
+          dotnet build
+          dotnet run
+      SHELL
     end
-
-    # Провизия виртуальной машины
-    lab5.vm.provision "shell", inline: <<-SHELL
-      # Установка необходимых пакетов
-      sudo apt-get update && sudo apt-get install -y wget apt-transport-https
-
-      # Установка .NET SDK 8.0
-      wget https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-      sudo dpkg -i packages-microsoft-prod.deb
-      sudo apt-get update
-      sudo apt-get install -y dotnet-sdk-8.0
-
-      # Сборка и запуск Lab5
-      cd /vagrant
-      dotnet publish -c Release -o out
-      cd out
-      dotnet Lab5.dll
-    SHELL
-  end
+    
     
 end
