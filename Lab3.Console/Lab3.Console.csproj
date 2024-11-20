@@ -7,19 +7,15 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="4.1.1" />
-    <PackageReference Include="Microsoft.Extensions.CommandLineUtils" Version="1.1.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Lab3.Library\Lab3.Library.csproj" />
-  </ItemGroup>
-
 
   <ItemGroup>
 	  <None Update="INPUT.txt">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
     </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Lab3.Library" Version="1.0.0" />
+  </ItemGroup>
 </Project>
