@@ -12,6 +12,8 @@ using Microsoft.IdentityModel.Logging;
 var builder = WebApplication.CreateBuilder(args);
 
 //To use MVC we have to explicitly declare we are using it. Doing so will prevent a System.InvalidOperationException.
+builder.Services.AddHttpClient();
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddAuth0WebAppAuthentication(options =>
 {
@@ -33,6 +35,8 @@ if (!app.Environment.IsDevelopment())
 
 app.UseStaticFiles();
 app.UseCookiePolicy();
+
+
 
 app.UseRouting();
 app.UseAuthentication();

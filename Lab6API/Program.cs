@@ -1,5 +1,6 @@
 ﻿using Lab6API.Data;
 using Lab6API.Test;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 
 namespace Lab6API
@@ -10,12 +11,40 @@ namespace Lab6API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            var connectionString = builder.Configuration.GetConnectionString("SQLite");
+            // JWT для API
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+               .AddJwtBearer(options =>
+               {
+                   options.Authority = $"https://{builder.Configuration["Auth0:Domain"]}";
+                   options.Audience = builder.Configuration["Auth0:Audience"];
+               });
 
+            var databaseProvider = builder.Configuration["DatabaseProvider"];
+            string connectionString = builder.Configuration.GetConnectionString(databaseProvider);
+
+            // Конфігурація DbContext
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite(connectionString)
-                        .EnableSensitiveDataLogging() // для отображения значений параметров
-                        .LogTo(Console.WriteLine));   // для вывода запросов в консоль;
+            {
+                switch (databaseProvider)
+                {
+                    case "MSSQL":
+                        options.UseSqlServer(connectionString);
+                        break;
+                    case "Postgres":
+                        options.UseNpgsql(connectionString);
+                        break;
+                    case "SQLite":
+                        options.UseSqlite(connectionString);
+                        break;
+                    case "InMemory":
+                        options.UseInMemoryDatabase("InMemoryDb");
+                        break;
+                    default:
+                        throw new Exception("Unknown database provider.");
+                }
+                options.EnableSensitiveDataLogging()
+                       .LogTo(Console.WriteLine);
+            });
 
             // Add services to the container.
             builder.Services.AddControllers();
@@ -41,8 +70,8 @@ namespace Lab6API
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
-
 
             app.MapControllers();
 

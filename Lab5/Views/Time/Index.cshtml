@@ -1,0 +1,21 @@
+﻿@{
+    ViewData["Title"] = "Узнать время в Киеве";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<!-- Кнопка для запроса времени -->
+<form asp-controller="Time" asp-action="GetTimeInKyiv" method="get">
+    <button type="submit">Узнать время в Киеве</button>
+</form>
+
+<!-- Вывод результата или ошибки -->
+@if (ViewBag.Result != null)
+{
+    <p><strong>@ViewBag.Result</strong></p>
+}
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <p style="color:red;"><strong>@ViewBag.ErrorMessage</strong></p>
+}
