@@ -1,0 +1,165 @@
+﻿@model List<Lab5.ViewModels.CarManufacturerViewModel>
+
+<h1 class="page-title">Car Manufacturers</h1>
+
+<!-- Вибір режиму перегляду -->
+<div class="view-mode-selector">
+    <label>
+        <input type="radio" name="viewMode" value="list" checked /> List View
+    </label>
+    <label>
+        <input type="radio" name="viewMode" value="detailed" /> Detailed View
+    </label>
+</div>
+
+<!-- Виведення в залежності від вибраного режиму -->
+<div id="carManufacturersList" class="view-mode">
+    @if (Model != null && Model.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Manufacturer Number</th>
+                    <th>Manufacturer Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var manufacturer in Model)
+                {
+                    <tr>
+                        <td>@manufacturer.CarManufacturerNr</td>
+                        <td>@manufacturer.CarManufacturerName</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No car manufacturers found.</p>
+    }
+</div>
+
+<div id="carManufacturersDetailed" class="view-mode" style="display:none;">
+    @if (Model != null && Model.Any())
+    {
+        @foreach (var manufacturer in Model)
+        {
+            <div class="manufacturer-detail">
+                <h1 class="manufacturer-name">@manufacturer.CarManufacturerName</h1>
+                <p><strong>Manufacturer Number:</strong> @manufacturer.CarManufacturerNr</p>
+                <hr />
+            </div>
+        }
+    }
+    else
+    {
+        <p>No car manufacturers found.</p>
+    }
+</div>
+
+@section Styles {
+    <style>
+        .page-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .view-mode-selector {
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+            .view-mode-selector label {
+                margin-right: 20px;
+                cursor: pointer;
+            }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+            .table thead {
+                background-color: #f2f2f2;
+            }
+
+            .table th, .table td {
+                padding: 10px;
+                text-align: left;
+                border: 1px solid #ddd;
+            }
+
+            .table th {
+                background-color: #f2f2f2;
+            }
+
+        .btn-info {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            text-align: center;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+            .btn-info:hover {
+                background-color: #0056b3;
+            }
+
+        .manufacturer-detail {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .manufacturer-name {
+            font-size: 1.5rem;
+            color: #333;
+        }
+
+        .view-mode {
+            display: none;
+        }
+
+            .view-mode.active {
+                display: block;
+            }
+
+        .view-mode-selector input[type="radio"] {
+            margin-right: 5px;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Перемикач між режимами перегляду
+            $('input[name="viewMode"]').change(function () {
+                if ($(this).val() == 'list') {
+                    $('#carManufacturersList').show();
+                    $('#carManufacturersDetailed').hide();
+                } else {
+                    $('#carManufacturersList').hide();
+                    $('#carManufacturersDetailed').show();
+                }
+            });
+
+            // Встановлення початкового виду
+            if ($('input[name="viewMode"]:checked').val() == 'list') {
+                $('#carManufacturersList').show();
+                $('#carManufacturersDetailed').hide();
+            } else {
+                $('#carManufacturersList').hide();
+                $('#carManufacturersDetailed').show();
+            }
+        });
+    </script>
+}

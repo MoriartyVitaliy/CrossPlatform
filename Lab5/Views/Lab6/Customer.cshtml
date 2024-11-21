@@ -1,0 +1,185 @@
+﻿@model List<Lab5.ViewModels.CustomerViewModels>
+
+@{
+    ViewData["Title"] = "Customers List";
+    var organisationName = ViewData["OrganisationName"] as string;
+    var status = ViewData["Status"] as string;
+}
+
+<h1 class="page-title">@ViewData["Title"]</h1>
+
+<!-- Форма пошуку -->
+<form method="get">
+    <div>
+        <label for="organisationName">Search by Organisation Name:</label>
+        <input type="text" id="organisationName" name="organisationName" placeholder="Enter Organisation Name" value="@organisationName" />
+    </div>
+
+    <div>
+        <select id="status" name="status">
+            <option value="">--Select Status--</option>
+            @foreach (var statusOption in new List<string> { "Active", "Inactive", "Pending" })
+            {
+                <option value="@statusOption">@statusOption</option>
+            }
+        </select>
+
+    </div>
+
+    <button type="submit">Search</button>
+</form>
+
+<!-- Вибір режиму перегляду -->
+<div class="view-mode-selector">
+    <label>
+        <input type="radio" name="viewMode" value="list" checked /> List View
+    </label>
+    <label>
+        <input type="radio" name="viewMode" value="detailed" /> Detailed View
+    </label>
+</div>
+
+<!-- Списковий перегляд -->
+<div id="customersList" class="view-mode">
+    @if (Model != null && Model.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Customer ID</th>
+                    <th>Full Name</th>
+                    <th>Organisation</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var customer in Model)
+                {
+                    <tr>
+                        <td>@customer.CustomerID</td>
+                        <td>@customer.IndividualFirstName @customer.IndividualLastName</td>
+                        <td>@customer.OrganisationName</td>
+                        <td>@customer.CustomerStatus.StatusDescription</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No customers found.</p>
+    }
+</div>
+
+<!-- Деталізований перегляд -->
+<div id="customersDetailed" class="view-mode" style="display:none;">
+    @if (Model != null && Model.Any())
+    {
+        @foreach (var customer in Model)
+        {
+            <div class="customer-detail">
+                <h1 class="customer-name">@customer.IndividualFirstName @customer.IndividualLastName</h1>
+                <p><strong>Customer ID:</strong> @customer.CustomerID</p>
+                <p><strong>Organisation Name:</strong> @customer.OrganisationName</p>
+                <p><strong>Status:</strong> @customer.CustomerStatus.StatusDescription</p>
+                <p><strong>Details:</strong> @customer.OtherDetails</p>
+                <hr />
+            </div>
+        }
+    }
+    else
+    {
+        <p>No customers found.</p>
+    }
+</div>
+
+@section Styles {
+    <style>
+        .page-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .view-mode-selector {
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .view-mode-selector label {
+            margin-right: 20px;
+            cursor: pointer;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        .table thead {
+            background-color: #f2f2f2;
+        }
+
+        .table th, .table td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .table th {
+            background-color: #f2f2f2;
+        }
+
+        .customer-detail {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .customer-name {
+            font-size: 1.5rem;
+            color: #333;
+        }
+
+        .view-mode {
+            display: none;
+        }
+
+        .view-mode.active {
+            display: block;
+        }
+
+        .view-mode-selector input[type="radio"] {
+            margin-right: 5px;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Перемикач між режимами перегляду
+            $('input[name="viewMode"]').change(function () {
+                if ($(this).val() == 'list') {
+                    $('#customersList').show();
+                    $('#customersDetailed').hide();
+                } else {
+                    $('#customersList').hide();
+                    $('#customersDetailed').show();
+                }
+            });
+
+            // Встановлення початкового виду
+            if ($('input[name="viewMode"]:checked').val() == 'list') {
+                $('#customersList').show();
+                $('#customersDetailed').hide();
+            } else {
+                $('#customersList').hide();
+                $('#customersDetailed').show();
+            }
+        });
+    </script>
+}
