@@ -26,6 +26,7 @@ namespace Lab6API.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) 
             : base(options)
         {
+            Database.EnsureDeleted();
             Database.EnsureCreated();
         }
 
@@ -140,6 +141,156 @@ namespace Lab6API.Data
                 .HasOne(pio => pio.PartSupplier)
                 .WithMany(o => o.PartInOrders)
                 .HasForeignKey(pio => pio.PartSupplierID);
+
+
+            // Додавання даних для Brand
+            var brands = new[]
+            {
+        new Brand { BrandID = Guid.NewGuid().ToString(), BrandName = "Toyota", BrandDetails = "Details about Toyota" },
+        new Brand { BrandID = Guid.NewGuid().ToString(), BrandName = "Honda", BrandDetails = "Details about Honda" },
+    };
+            modelBuilder.Entity<Brand>().HasData(brands);
+
+            // Додавання даних для PartGroup
+            var partGroups = new[]
+            {
+        new PartGroup { PartGroupID = Guid.NewGuid().ToString(), PartGroupName = "Engine" },
+        new PartGroup { PartGroupID = Guid.NewGuid().ToString(), PartGroupName = "Brakes" },
+    };
+            modelBuilder.Entity<PartGroup>().HasData(partGroups);
+
+            // Додавання даних для CarManufacturer
+            var manufacturers = new[]
+            {
+        new CarManufacturer { CarManufacturerNr = Guid.NewGuid().ToString(), CarManufacturerName = "Toyota" },
+        new CarManufacturer { CarManufacturerNr = Guid.NewGuid().ToString(), CarManufacturerName = "Honda" },
+    };
+            modelBuilder.Entity<CarManufacturer>().HasData(manufacturers);
+
+            // Додавання даних для CustomerStatus
+            var statuses = new[]
+            {
+        new CustomerStatus { StatusCode = 1, StatusDescription = "Active" },
+        new CustomerStatus { StatusCode = 2, StatusDescription = "Inactive" },
+    };
+            modelBuilder.Entity<CustomerStatus>().HasData(statuses);
+
+            // Додавання даних для Supplier
+            var suppliers = new[]
+            {
+        new Supplier
+        {
+            SupplierNr = Guid.NewGuid().ToString(),
+            SupplierName = "Supplier A",
+            StreetAddress = "123 Main St",
+            Town = "Townsville",
+            County = "County",
+            Postcode = "12345",
+            Phone = "123-456-7890",
+            OtherDetails = "High quality parts"
+        },
+        new Supplier
+        {
+            SupplierNr = Guid.NewGuid().ToString(),
+            SupplierName = "Supplier B",
+            StreetAddress = "456 Side St",
+            Town = "Cityville",
+            County = "Region",
+            Postcode = "67890",
+            Phone = "987-654-3210",
+            OtherDetails = "Affordable prices"
+        },
+    };
+            modelBuilder.Entity<Supplier>().HasData(suppliers);
+
+            // Додавання даних для Part
+            var parts = new[]
+            {
+        new Part
+        {
+            PartID = Guid.NewGuid().ToString(),
+            BrandID = brands[0].BrandID,
+            MainSupplierNr = suppliers[0].SupplierNr,
+            PartGroupID = partGroups[0].PartGroupID,
+            PartMakerCode = "PM1",
+            PartName = "Engine Part 1",
+            MainSupplierName = "Supplier A",
+            PriceToUs = 50.00m,
+            PriceToCustomer = 75.00m,
+            OtherPartDetails = "High performance"
+        },
+        new Part
+        {
+            PartID = Guid.NewGuid().ToString(),
+            BrandID = brands[1].BrandID,
+            MainSupplierNr = suppliers[1].SupplierNr,
+            PartGroupID = partGroups[1].PartGroupID,
+            PartMakerCode = "PM2",
+            PartName = "Brake Part 1",
+            MainSupplierName = "Supplier B",
+            PriceToUs = 20.00m,
+            PriceToCustomer = 35.00m,
+            OtherPartDetails = "Reliable braking"
+        },
+    };
+            modelBuilder.Entity<Part>().HasData(parts);
+
+            // Додавання даних для PartMaker
+            var partMakers = new[]
+            {
+        new PartMaker { PartMakerCode = "PM1", PartMakerName = "Maker A" },
+        new PartMaker { PartMakerCode = "PM2", PartMakerName = "Maker B" },
+    };
+            modelBuilder.Entity<PartMaker>().HasData(partMakers);
+
+            // Додавання даних для Customer
+            var customers = new[]
+            {
+        new Customer
+        {
+            CustomerID = Guid.NewGuid().ToString(),
+            StatusCode = statuses[0].StatusCode,
+            IndividualOrOrganisation = "Individual",
+            OrganisationName = "",
+            IndividualFirstName = "John",
+            IndividualMiddleName = "A.",
+            IndividualLastName = "Doe",
+            OtherDetails = "Preferred customer"
+        },
+        new Customer
+        {
+            CustomerID = Guid.NewGuid().ToString(),
+            StatusCode = statuses[1].StatusCode,
+            IndividualOrOrganisation = "Organisation",
+            OrganisationName = "Acme Corp",
+            IndividualFirstName = "",
+            IndividualMiddleName = "",
+            IndividualLastName = "",
+            OtherDetails = "Corporate account"
+        },
+    };
+            modelBuilder.Entity<Customer>().HasData(customers);
+
+            // Додавання даних для Order
+            var orders = new[]
+            {
+        new Order
+        {
+            OrderID = Guid.NewGuid().ToString(),
+            CustomerID = customers[0].CustomerID,
+            OrderAmountDue = 200.00m,
+            OtherDetails = "Urgent order"
+        },
+        new Order
+        {
+            OrderID = Guid.NewGuid().ToString(),
+            CustomerID = customers[1].CustomerID,
+            OrderAmountDue = 500.00m,
+            OtherDetails = "Scheduled order"
+        },
+    };
+            modelBuilder.Entity<Order>().HasData(orders);
+
         }
 
 
