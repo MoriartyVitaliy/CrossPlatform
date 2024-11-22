@@ -4,7 +4,7 @@ namespace Lab6API.Model
 {
     public class Customer
     {
-        public int CustomerID { get; set; }
+        public string CustomerID { get; set; } = Guid.NewGuid().ToString();
         public int StatusCode { get; set; }
         public string IndividualOrOrganisation { get; set; }
         public string OrganisationName { get; set; }

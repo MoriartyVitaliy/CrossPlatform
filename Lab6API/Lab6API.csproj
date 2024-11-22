@@ -11,9 +11,15 @@
     <None Remove="appsettings.json~RF17f2d62.TMP" />
     <None Remove="appsettings.json~RF19f9e7.TMP" />
     <None Remove="Model\Brand.cs~RF212f9cf.TMP" />
+    <None Remove="Model\Brand.cs~RF94cc0a.TMP" />
     <None Remove="Model\Car.cs~RF23b0c6a.TMP" />
     <None Remove="Model\CarManufacturer.cs~RF1849f3e.TMP" />
+    <None Remove="Model\CarManufacturer.cs~RFa98f97.TMP" />
     <None Remove="Model\Customer.cs~RF1db5712.TMP" />
+    <None Remove="Model\CustomerStatus.cs~RFae0800.TMP" />
+    <None Remove="Model\Order.cs~RF6edd39.TMP" />
+    <None Remove="Model\Order.cs~RFb9fc4e.TMP" />
+    <None Remove="Model\Order.cs~RFbafe5c.TMP" />
     <None Remove="Model\PartGroup.cs~RF2e65932.TMP" />
     <None Remove="Model\PartMaker.cs~RF257945e.TMP" />
     <None Remove="Model\Supplier.cs~RF20ccf22.TMP" />

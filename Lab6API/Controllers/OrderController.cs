@@ -20,15 +20,18 @@ namespace Lab6API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
         {
-            return await _context.Orders.Include(o => o.Customer).ToListAsync();
+            return await _context.Orders
+                .Include(o => o.Customer)
+                .ToListAsync();
         }
 
-        // GET: api/Orders/5
+        // GET: api/Orders/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<Order>> GetOrder(int id)
+        public async Task<ActionResult<Order>> GetOrder(string id)
         {
-            var order = await _context.Orders.Include(o => o.Customer)
-                                             .FirstOrDefaultAsync(o => o.OrderID == id);
+            var order = await _context.Orders
+                .Include(o => o.Customer)
+                .FirstOrDefaultAsync(o => o.OrderID == id);
 
             if (order == null)
             {
@@ -40,21 +43,19 @@ namespace Lab6API.Controllers
 
         // POST: api/Orders
         [HttpPost]
-        public async Task<ActionResult<Order>> PostOrder(Order order)
+        public async Task<ActionResult<Order>> CreateOrder(Order order)
         {
-            if (order == null)
+            // Проверка наличия клиента
+            if (!_context.Customers.Any(c => c.CustomerID == order.CustomerID))
             {
-                return BadRequest("Order data is null.");
+                return BadRequest("Клиент с указанным ID не найден.");
             }
 
-            var customer = await _context.Customers
-                .FirstOrDefaultAsync(c => c.CustomerID == order.CustomerID);
-
-            if (customer == null)
+            // Генерация ID, если не задано
+            if (string.IsNullOrEmpty(order.OrderID))
             {
-                return NotFound($"Customer with CustomerID {order.CustomerID} not found.");
+                order.OrderID = Guid.NewGuid().ToString();
             }
-            order.Customer = customer;
 
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
@@ -62,19 +63,19 @@ namespace Lab6API.Controllers
             return CreatedAtAction(nameof(GetOrder), new { id = order.OrderID }, order);
         }
 
-
-        // PUT: api/Orders/5
+        // PUT: api/Orders/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutOrder(int id, Order order)
+        public async Task<IActionResult> UpdateOrder(string id, Order order)
         {
             if (id != order.OrderID)
             {
-                return BadRequest();
+                return BadRequest("ID в запросе и модели не совпадают.");
             }
 
+            // Проверка наличия клиента
             if (!_context.Customers.Any(c => c.CustomerID == order.CustomerID))
             {
-                return BadRequest("CustomerID does not exist.");
+                return BadRequest("Клиент с указанным ID не найден.");
             }
 
             _context.Entry(order).State = EntityState.Modified;
@@ -98,14 +99,23 @@ namespace Lab6API.Controllers
             return NoContent();
         }
 
-        // DELETE: api/Orders/5
+        // DELETE: api/Orders/{id}
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteOrder(int id)
+        public async Task<IActionResult> DeleteOrder(string id)
         {
-            var order = await _context.Orders.FindAsync(id);
+            var order = await _context.Orders
+                .Include(o => o.PartsInOrders)
+                .FirstOrDefaultAsync(o => o.OrderID == id);
+
             if (order == null)
             {
                 return NotFound();
+            }
+
+            // Удаление связанных записей
+            if (order.PartsInOrders.Any())
+            {
+                return Conflict("Невозможно удалить заказ, так как он содержит детали.");
             }
 
             _context.Orders.Remove(order);
@@ -114,9 +124,9 @@ namespace Lab6API.Controllers
             return NoContent();
         }
 
-        private bool OrderExists(int id)
+        private bool OrderExists(string id)
         {
-            return _context.Orders.Any(e => e.OrderID == id);
+            return _context.Orders.Any(o => o.OrderID == id);
         }
     }
 }

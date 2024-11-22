@@ -4,15 +4,16 @@ namespace Lab6API.Model
 {
     public class Car
     {
-        public int CarID { get; set; }
-        public int CarManufacturerNr { get; set; }
+        [JsonIgnore]
+        public string CarID { get; set; } = Guid.NewGuid().ToString();
+        public string CarManufacturerNr { get; set; }
         public int CarYearOfManufacture { get; set; }
         public string CarModel { get; set; }
         public string OtherCarDetails { get; set; }
 
         public CarManufacturer? CarManufacturer { get; set; }
         [JsonIgnore]
-        public virtual ICollection<PartForCar> PartsForCars { get; set; } = new List<PartForCar>();
+        public virtual ICollection<PartForCar> PartsForCars { get; set; }
     }
 
 }

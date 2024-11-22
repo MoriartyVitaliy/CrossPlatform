@@ -7,25 +7,25 @@ namespace Lab6API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CarManufacturerController : ControllerBase
+    public class CarManufacturersController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public CarManufacturerController(ApplicationDbContext context)
+        public CarManufacturersController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/CarManufacturer
+        // GET: api/CarManufacturers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CarManufacturer>>> GetCarManufacturers()
         {
             return await _context.CarManufacturers.ToListAsync();
         }
 
-        // GET: api/CarManufacturer/5
+        // GET: api/CarManufacturers/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<CarManufacturer>> GetCarManufacturer(int id)
+        public async Task<ActionResult<CarManufacturer>> GetCarManufacturer(string id)
         {
             var carManufacturer = await _context.CarManufacturers.FindAsync(id);
 
@@ -37,23 +37,29 @@ namespace Lab6API.Controllers
             return carManufacturer;
         }
 
-        // POST: api/CarManufacturer
+        // POST: api/CarManufacturers
         [HttpPost]
-        public async Task<ActionResult<CarManufacturer>> PostCarManufacturer(CarManufacturer carManufacturer)
+        public async Task<ActionResult<CarManufacturer>> CreateCarManufacturer(CarManufacturer carManufacturer)
         {
+            // Генерация уникального идентификатора, если не указано
+            if (string.IsNullOrEmpty(carManufacturer.CarManufacturerNr))
+            {
+                carManufacturer.CarManufacturerNr = Guid.NewGuid().ToString();
+            }
+
             _context.CarManufacturers.Add(carManufacturer);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCarManufacturer", new { id = carManufacturer.CarManufacturerNr }, carManufacturer);
+            return CreatedAtAction(nameof(GetCarManufacturer), new { id = carManufacturer.CarManufacturerNr }, carManufacturer);
         }
 
-        // PUT: api/CarManufacturer/5
+        // PUT: api/CarManufacturers/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCarManufacturer(int id, CarManufacturer carManufacturer)
+        public async Task<IActionResult> UpdateCarManufacturer(string id, CarManufacturer carManufacturer)
         {
             if (id != carManufacturer.CarManufacturerNr)
             {
-                return BadRequest();
+                return BadRequest("ID в запросе и модели не совпадают.");
             }
 
             _context.Entry(carManufacturer).State = EntityState.Modified;
@@ -77,9 +83,9 @@ namespace Lab6API.Controllers
             return NoContent();
         }
 
-        // DELETE: api/CarManufacturer/5
+        // DELETE: api/CarManufacturers/{id}
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCarManufacturer(int id)
+        public async Task<IActionResult> DeleteCarManufacturer(string id)
         {
             var carManufacturer = await _context.CarManufacturers.FindAsync(id);
             if (carManufacturer == null)
@@ -93,7 +99,7 @@ namespace Lab6API.Controllers
             return NoContent();
         }
 
-        private bool CarManufacturerExists(int id)
+        private bool CarManufacturerExists(string id)
         {
             return _context.CarManufacturers.Any(e => e.CarManufacturerNr == id);
         }

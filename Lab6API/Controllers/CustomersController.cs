@@ -23,12 +23,13 @@ namespace Lab6API.Controllers
             return await _context.Customers.Include(c => c.CustomerStatus).ToListAsync();
         }
 
-        // GET: api/Customers/5
+        // GET: api/Customers/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<Customer>> GetCustomer(int id)
+        public async Task<ActionResult<Customer>> GetCustomer(string id)
         {
-            var customer = await _context.Customers.Include(c => c.CustomerStatus)
-                                                   .FirstOrDefaultAsync(c => c.CustomerID == id);
+            var customer = await _context.Customers
+                .Include(c => c.CustomerStatus)
+                .FirstOrDefaultAsync(c => c.CustomerID == id);
 
             if (customer == null)
             {
@@ -40,34 +41,22 @@ namespace Lab6API.Controllers
 
         // POST: api/Customers
         [HttpPost]
-        public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
+        public async Task<ActionResult<Customer>> CreateCustomer(Customer customer)
         {
-            if(customer == null)
-            {
-                return BadRequest("Customer data is null");
-            }
-            
-            var status = await _context.CustomerStatuses
-                .FirstOrDefaultAsync(s => s.StatusCode == customer.StatusCode);
-            if(status == null)
-            {
-                return BadRequest("Customer status not found");
-            }
 
-            customer.CustomerStatus = status;
             _context.Customers.Add(customer);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetCustomer), new { id = customer.CustomerID }, customer);
         }
 
-        // PUT: api/Customers/5
+        // PUT: api/Customers/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCustomer(int id, Customer customer)
+        public async Task<IActionResult> UpdateCustomer(string id, Customer customer)
         {
             if (id != customer.CustomerID)
             {
-                return BadRequest();
+                return BadRequest("ID в запросе и модели не совпадают.");
             }
 
             _context.Entry(customer).State = EntityState.Modified;
@@ -91,14 +80,22 @@ namespace Lab6API.Controllers
             return NoContent();
         }
 
-        // DELETE: api/Customers/5
+        // DELETE: api/Customers/{id}
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCustomer(int id)
+        public async Task<IActionResult> DeleteCustomer(string id)
         {
-            var customer = await _context.Customers.FindAsync(id);
+            var customer = await _context.Customers
+                .Include(c => c.Orders)
+                .FirstOrDefaultAsync(c => c.CustomerID == id);
+
             if (customer == null)
             {
                 return NotFound();
+            }
+
+            if (customer.Orders.Any())
+            {
+                return Conflict("Невозможно удалить клиента, так как у него есть заказы.");
             }
 
             _context.Customers.Remove(customer);
@@ -107,7 +104,7 @@ namespace Lab6API.Controllers
             return NoContent();
         }
 
-        private bool CustomerExists(int id)
+        private bool CustomerExists(string id)
         {
             return _context.Customers.Any(e => e.CustomerID == id);
         }

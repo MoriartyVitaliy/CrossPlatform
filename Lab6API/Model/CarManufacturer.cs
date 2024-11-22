@@ -1,10 +1,13 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Lab6API.Model
 {
     public class CarManufacturer
     {
-        public int CarManufacturerNr { get; set; }
+        [Key]
+        public string CarManufacturerNr { get; set; } = Guid.NewGuid().ToString();
+        [Required]
         public string CarManufacturerName { get; set; }
 
         [JsonIgnore]

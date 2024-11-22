@@ -2,9 +2,9 @@
 {
     public class PartInOrder
     {
-        public int PartInOrderID { get; set; }
-        public int OrderID { get; set; }
-        public int PartSupplierID { get; set; }
+        public string PartInOrderID { get; set; }
+        public string OrderID { get; set; }
+        public string PartSupplierID { get; set; }
         public decimal ActualSalesPrice { get; set; }
         public int Quantity { get; set; }
 

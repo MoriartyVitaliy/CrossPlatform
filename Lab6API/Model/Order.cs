@@ -4,8 +4,8 @@ namespace Lab6API.Model
 {
     public class Order
     {
-        public int OrderID { get; set; }
-        public int CustomerID { get; set; }
+        public string OrderID { get; set; } = Guid.NewGuid().ToString();
+        public string CustomerID { get; set; }
         public decimal OrderAmountDue { get; set; }
         public string OtherDetails { get; set; }
 

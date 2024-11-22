@@ -9,7 +9,7 @@ namespace Lab6API.Test
     {
         public static void Seed(ApplicationDbContext context)
         {
-            if (context.Brands.Any()) return;
+/*            if (context.Brands.Any()) return;
 
             var brands = new List<Brand>
             {
@@ -137,7 +137,7 @@ namespace Lab6API.Test
 
             context.SaveChanges();
 
-
+*/
         }
     }
 }

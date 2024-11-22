@@ -7,23 +7,23 @@ namespace Lab6API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CustomerStatusController : ControllerBase
+    public class CustomerStatusesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public CustomerStatusController(ApplicationDbContext context)
+        public CustomerStatusesController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/CustomerStatus
+        // GET: api/CustomerStatuses
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CustomerStatus>>> GetCustomerStatuses()
         {
             return await _context.CustomerStatuses.ToListAsync();
         }
 
-        // GET: api/CustomerStatus/5
+        // GET: api/CustomerStatuses/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<CustomerStatus>> GetCustomerStatus(int id)
         {
@@ -37,26 +37,28 @@ namespace Lab6API.Controllers
             return customerStatus;
         }
 
-        // POST: api/CustomerStatus
+        // POST: api/CustomerStatuses
         [HttpPost]
-        public async Task<ActionResult<CustomerStatus>> PostCustomerStatus(CustomerStatus customerStatus)
+        public async Task<ActionResult<CustomerStatus>> CreateCustomerStatus(CustomerStatus customerStatus)
         {
-            // Если хотите избежать обязательного поля Customers, раскомментируйте строку ниже:
-            // customerStatus.Customers = new List<Customer>(); 
+            if (_context.CustomerStatuses.Any(cs => cs.StatusCode == customerStatus.StatusCode))
+            {
+                return Conflict($"StatusCode {customerStatus.StatusCode} уже существует.");
+            }
 
             _context.CustomerStatuses.Add(customerStatus);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCustomerStatus", new { id = customerStatus.StatusCode }, customerStatus);
+            return CreatedAtAction(nameof(GetCustomerStatus), new { id = customerStatus.StatusCode }, customerStatus);
         }
 
-        // PUT: api/CustomerStatus/5
+        // PUT: api/CustomerStatuses/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCustomerStatus(int id, CustomerStatus customerStatus)
+        public async Task<IActionResult> UpdateCustomerStatus(int id, CustomerStatus customerStatus)
         {
             if (id != customerStatus.StatusCode)
             {
-                return BadRequest();
+                return BadRequest("ID в запросе и модели не совпадают.");
             }
 
             _context.Entry(customerStatus).State = EntityState.Modified;
@@ -80,7 +82,7 @@ namespace Lab6API.Controllers
             return NoContent();
         }
 
-        // DELETE: api/CustomerStatus/5
+        // DELETE: api/CustomerStatuses/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCustomerStatus(int id)
         {

@@ -4,11 +4,11 @@ namespace Lab6API.Model
 {
     public class Part
     {
-        public int PartID { get; set; }
-        public int BrandID { get; set; }
-        public int MainSupplierNr { get; set; }
-        public int PartGroupID { get; set; }
-        public int PartMakerCode { get; set; }
+        public string PartID { get; set; }
+        public string BrandID { get; set; }
+        public string MainSupplierNr { get; set; }
+        public string PartGroupID { get; set; }
+        public string PartMakerCode { get; set; }
         public string PartName { get; set; }
         public string? MainSupplierName { get; set; }
         public decimal PriceToUs { get; set; }
@@ -21,8 +21,8 @@ namespace Lab6API.Model
         public PartMaker? PartMaker { get; set; }
 
         [JsonIgnore]
-        public virtual ICollection<PartSupplier> PartSuppliers { get; set; } = new List<PartSupplier>();
+        public virtual ICollection<PartSupplier> PartSuppliers { get; set; }
         [JsonIgnore]
-        public virtual ICollection<PartForCar> PartsForCars { get; set; } = new List<PartForCar>();
+        public virtual ICollection<PartForCar> PartsForCars { get; set; }
     }
 }

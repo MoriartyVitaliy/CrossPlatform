@@ -4,7 +4,7 @@ namespace Lab6API.Model
 {
     public class PartMaker
     {
-        public int PartMakerCode { get; set; }
+        public string PartMakerCode { get; set; }
         public string PartMakerName { get; set; }
 
         [JsonIgnore]
